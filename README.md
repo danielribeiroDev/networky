@@ -1,6 +1,6 @@
 # NestJS Professional Matcher
 
-![NestJS Logo](https://nestjs.com/img/logo_text.svg)
+![NestJS Logo](networky.jpg)
 
 ## Overview
 
