@@ -4,7 +4,7 @@
 
 ## Overview
 
-Welcome to the NestJS Professional Matcher, a project developed for the FIAP challenge in partnership with MID. This application aims to connect CEOs and other professionals based on their profiles, facilitating networking and collaboration within the business community.
+Welcome to the Networky, a project developed for the FIAP challenge in partnership with MID. This application aims to connect CEOs and other professionals based on their profiles, facilitating networking and collaboration within the business community.
 
 ## Features
 
