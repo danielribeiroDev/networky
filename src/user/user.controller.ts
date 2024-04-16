@@ -1,48 +1,57 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, BadRequestException, NotFoundException, Query } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { SignUpDto } from 'src/auth/dto/sign-up.dto';
-import { EmailService } from 'src/email/email.service';
-import { JwtService } from '@nestjs/jwt';
 import { AllowAnon } from 'src/auth/decorators/AllowAnon';
+import { CompanyService } from 'src/company/company.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { EmailService } from 'src/email/email.service';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('user')
 export class UserController {
   constructor(
+    private readonly authService: AuthService,
     private readonly userService: UserService,
-    private readonly emailService: EmailService,
-    private readonly jwtService: JwtService
+    private readonly companyService: CompanyService,
+    private readonly emailService: EmailService
   ) {}
 
   @AllowAnon()
   @Post()
-  async create(@Body() createUserDto: SignUpDto) {
-    const user =  this.userService.create(createUserDto);
-    const confirmationToken = await this.jwtService.signAsync({ userId: user.id })
+  async create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
+    const company = await this.companyService.findById(createUserDto.companyId);
+    const user = await this.userService.create(createUserDto, company);
+    const confirmationToken = await this.authService.genConfirmationToken(user.id)
     this.emailService.sendMail(
       user.email,
-      'Confirm your email',
-      'Please confirm your email by clicking the link below',
-      `<a href="http://172.19.120.157:3000/email-confirmation?token=${confirmationToken}">Confirm your email</a>`
-    );
-    return user;
+        'Networky - email confirmation',
+        'Please confirm your email by clicking the link below',
+        `<a href="http://172.19.120.157:3000/user/confirm?token=${confirmationToken}">Confirm your email</a>`
+    )
+    return 
   }
 
   @AllowAnon()
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findAll() {
+    return await this.userService.findAll();
+  }
+
+  @AllowAnon()
+  @Get('confirm')
+  async confirm(@Query('token') token: string) {
+    const user = await this.userService.confirm(token);
+    return user.isConfirmed;
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return 'dfasd'
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')

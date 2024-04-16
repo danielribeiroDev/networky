@@ -1,54 +1,55 @@
-import { IsEmail, IsEnum, IsInt, IsString, Length, Min, Max } from 'class-validator';
-import { CompanyFocus } from "src/enums/companyFocus.enum";
-import { CompanyIndustry } from "src/enums/companyIndustry.enum";
+import { IsEmail, IsEnum, IsInt, IsString, Length, Min, Max, IsNotEmpty, IsNumber, MinLength, IsUUID } from 'class-validator';
+import { CompanyEntity } from 'src/company/entities/company.entity';
 import { EducationalBackground } from "src/enums/educationalBackground.enum";
-import { MarketPresence } from "src/enums/marketPresence.enum";
 import { ProfessionalExp } from "src/enums/professionalExp.enum";
-import { TechnologicalCapabilities } from "src/enums/technologicalCapabilities.enum";
 
 export class CreateUserDto {
 
     @IsEmail()
+    @IsNotEmpty()
     email: string;
 
     @IsString()
-    @Length(8, 20)
+    @IsNotEmpty()
+    @MinLength(6)
     password: string;
 
     @IsString()
-    @Length(1, 50)
+    @IsNotEmpty()
     name: string;
 
-    @IsString()
-    @Length(1, 50)
-    lastName: string;
+    @IsUUID()
+    companyId : string
 
-    @IsInt()
-    @Min(18)
-    @Max(100)
-    age: number;
+    // @IsString()
+    // @IsNotEmpty()
+    // lastName: string;
 
-    @IsEnum(EducationalBackground)
-    educationalBackground: EducationalBackground;
+    // @IsNotEmpty()
+    // @IsNumber()
+    // age: number
 
-    @IsEnum(ProfessionalExp)
-    professionalExp: ProfessionalExp;
+    // @IsString()
+    // @IsNotEmpty()
+    // title: string
+
+    // @IsNotEmpty()
+    // @IsString()
+    // cellphone: string
+
+    // @IsNotEmpty()
+    // @IsEnum(ProfessionalExp)
+    // professionalExp: ProfessionalExp
+
+    // @IsNotEmpty()
+    // @IsEnum(EducationalBackground)
+    // educationalBackground: EducationalBackground
     
-    @IsString()
-    @Length(1, 100)
-    companyName: string;
+    // @IsNotEmpty()
+    // @IsString()
+    // coordinates: string
 
-    @IsEnum(CompanyFocus)
-    companyFocus: CompanyFocus;
-
-    @IsEnum(CompanyIndustry)
-    companyIndustry: CompanyIndustry;
-
-    @IsEnum(MarketPresence)
-    marketPresence: MarketPresence;
-
-    @IsEnum(TechnologicalCapabilities)
-    technologicalCapabilities: TechnologicalCapabilities;
+    // company: CompanyEntity
 }
 
 /*

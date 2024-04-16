@@ -9,6 +9,7 @@ export class EmailConfimationController {
     @AllowAnon()
     @Get()
     async confirmEmail(@Query('token') token: string) {
-        return await this.emailConfimationService.confirmEmail(token);
+        const decoded = await this.emailConfimationService.confirmEmail(token);
+        const user = 
     }   
 }

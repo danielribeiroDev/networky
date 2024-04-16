@@ -1,18 +1,22 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { UserEntity } from "src/user/entities/user.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'companies' })
 export class CompanyEntity {
+    constructor() {
+    }
+
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column({ name: 'company_name', type: 'varchar', length: 100, unique: true, nullable: false })
-    companyName: string;
+    name: string;
 
     @Column({ name: 'company_focus', type: 'varchar', length: 50, nullable: false })
-    companyFocus: string;
+    focus: string;
 
     @Column({ name: 'company_industry', type: 'varchar', length: 50, nullable: false })
-    companyIndustry: string;
+    industry: string;
 
     @Column({ name: 'market_presence', type: 'varchar', length: 50, nullable: false })
     marketPresence: string;
@@ -22,6 +26,9 @@ export class CompanyEntity {
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
+
+    @OneToMany(() => UserEntity, user => user.company)
+    users: UserEntity[];
 
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;

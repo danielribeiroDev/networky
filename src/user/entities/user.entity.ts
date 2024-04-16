@@ -1,38 +1,31 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from  'typeorm'
+import { CompanyEntity } from "src/company/entities/company.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity({  name: 'users' })
+@Entity({name: 'users'})
 export class UserEntity {
+    constructor() {}
+
     @PrimaryGeneratedColumn('uuid')
     id: string
 
-    @Column({ name: 'email',type: 'varchar', length: 100, unique: true, nullable: false })
-    email: string;
+    @Column({name: 'email', type: 'varchar', unique: true,length: 100})
+    email: string
 
-    @Column({ name: 'password',type: 'varchar', length: 255, nullable: false })
-    password: string;
+    @Column({name: 'password', type:'varchar', length: 255})
+    password: string
 
-    @Column({ name: 'name', type: 'varchar', length: 50, nullable: false })
-    name: string;
+    isConfirmed?: boolean
 
-    @Column({ name: 'last_name', type: 'varchar', length: 50, nullable: false })
-    lastName: string;
+    @ManyToOne(() => CompanyEntity, company => company.users)
+    company: CompanyEntity
 
-    @Column({ name: 'age', type: 'int', nullable: false })
-    age: number;
+    @CreateDateColumn()
+    createdAt: Date
 
-    @Column({ name: 'educational_background',  type: 'varchar', length: 25, nullable: false })
-    educationalBackground: string;
+    @UpdateDateColumn()
+    updatedAt: Date
 
-    @Column({ name: 'professional_exp', type: 'varchar', length: 25, nullable: false })
-    professionalExp: string;
+    @DeleteDateColumn()
+    deletedAt: Date
 
-    @CreateDateColumn({ name: 'created_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    createdAt: Date;
-
-    @UpdateDateColumn({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    updatedAt: Date;
-
-    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    deletedAt: Date;
 }
-
